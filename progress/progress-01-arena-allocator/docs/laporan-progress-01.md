@@ -25,19 +25,26 @@ Pada tahap awal ini (Minggu 1), fokus utama tim adalah membangun fondasi sistem 
 Arena Allocator bekerja dengan prinsip bump allocation, yaitu menaikkan pointer atau offset setiap kali alokasi dilakukan tanpa mekanisme pembebasan per-blok. Keunggulan pendekatan ini adalah biaya alokasi yang rendah dan implementasi yang mudah dipahami. Konsekuensinya, pelepasan memori umumnya dilakukan secara kolektif melalui reset seluruh arena.
 
 ## 2. Implementasi Program
-### 2.1 Struktur Berkas
-Implementasi dilakukan pada tiga berkas sumber:
-- `src/arena.h`: deklarasi struktur `Arena` dan API utama.
-- `src/arena.c`: implementasi fungsi inisialisasi, alokasi, akses data, reset, destroy, cek sisa memori, dan dump visual.
-- `src/main.c`: simulasi penggunaan arena dengan skenario sukses dan gagal alokasi.
+### 2.1 Konsep Implementasi
+Pada tahap implementasi program ini, kami menerapkan konsep Arena Allocator sebagai blok memori utama untuk menampung alokasi data secara linear. Tahap awal difokuskan pada pembentukan arena sebagai wadah memori terpusat, kemudian program akan membagi memori tersebut melalui mekanisme offset sesuai kebutuhan alokasi data.
 
-### 2.2 Alur Uji Program
-Skenario uji pada program utama:
+Sebelum masuk ke penerapan struktur data lanjutan pada progress berikutnya, kami menyiapkan fungsi-fungsi krusial untuk membangun arena, yaitu:
+
+1) `arena_init`: Inisialisasi blok memori awal sebagai arena utama.
+2) `arena_alloc`: Mekanisme pembagian memori di dalam arena secara berurutan.
+3) `arena_get`: Pengambilan data berdasarkan `offset` hasil alokasi.
+4) `arena_reset`: Pengosongan arena secara instan untuk memulai alokasi dari awal kembali.
+5) `arena_destroy`: Pelepasan memori arena setelah program selesai digunakan.
+
+### 2.2 Struktur Berkas dan Alur Uji Program
+Implementasi dilakukan pada tiga berkas sumber utama, yaitu `src/arena.h`, `src/arena.c`, dan `src/main.c`. Berkas `arena.h` digunakan untuk mendeklarasikan struktur `Arena` serta prototipe fungsi, `arena.c` berisi implementasi seluruh fungsi utama arena, sedangkan `main.c` digunakan untuk menguji perilaku alokasi, penulisan data, pencetakan kondisi arena, dan proses reset.
+
+Skenario uji pada program utama disusun sebagai berikut:
 1. Inisialisasi arena dengan kapasitas 32 byte.
-2. Alokasi blok A (6 byte) dan isi dengan karakter `A`.
-3. Alokasi blok B (10 byte) dan isi dengan karakter `B`.
-4. Coba alokasi blok C (20 byte) untuk menguji kondisi gagal.
-5. Tampilkan dump arena sebelum dan sesudah reset.
+2. Alokasi blok A sebesar 6 byte dan isi dengan karakter `A`.
+3. Alokasi blok B sebesar 10 byte dan isi dengan karakter `B`.
+4. Coba alokasi blok C sebesar 20 byte untuk menguji kondisi gagal.
+5. Tampilkan kondisi arena sebelum dan sesudah proses reset.
 
 ## 3. Output Program
 ### 3.1 Ringkasan Hasil Eksekusi
