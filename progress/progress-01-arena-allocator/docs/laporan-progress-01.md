@@ -60,7 +60,15 @@ Output aktual hasil eksekusi tersimpan pada berkas `docs/output-progress-01.txt`
 
 ## 4. Pembahasan dan Kesimpulan
 ### 4.1 Pembahasan
-Hasil implementasi menunjukkan Arena Allocator berhasil mengelola alokasi memori linear menggunakan offset. Mekanisme ini membuat proses alokasi efisien karena tidak memerlukan pencarian blok bebas seperti allocator umum. Operasi `arena_reset()` terbukti efektif untuk mengosongkan seluruh alokasi logis dalam satu langkah.
+Berdasarkan hasil eksekusi program, implementasi Arena Allocator pada Progress 1 telah berjalan sesuai rancangan awal. Kondisi arena pada tahap awal berada pada keadaan kosong, kemudian berubah menjadi terisi setelah proses alokasi blok A dan blok B. Hal ini menunjukkan bahwa mekanisme alokasi linear berbasis offset berhasil diterapkan secara konsisten.
+
+Ketika dilakukan percobaan alokasi blok C dengan ukuran yang melebihi sisa kapasitas, sistem menolak alokasi tersebut. Perilaku ini menegaskan bahwa validasi kapasitas pada fungsi `arena_alloc` sudah bekerja dengan benar dan mampu mencegah akses memori di luar batas arena. Dari sisi keandalan, mekanisme ini penting untuk menjaga stabilitas program.
+
+Selain itu, fungsi `arena_reset` berhasil mengembalikan offset ke posisi awal tanpa perlu membebaskan setiap blok secara individual. Pendekatan ini menjadi keunggulan utama Arena Allocator karena proses pembersihan memori logis dapat dilakukan cepat dan sederhana.
+
+Namun, hasil pembahasan juga menunjukkan keterbatasan pada tahap ini. Arena belum mendukung deallocation per-blok dan belum memiliki strategi reuse sebagian area memori. Artinya, model ini efektif untuk pola alokasi sementara, tetapi belum cukup untuk kasus yang membutuhkan pelepasan memori granular.
 
 ### 4.2 Kesimpulan
-Keterbatasan pada Progress 1 adalah belum adanya dukungan deallocation per-blok dan belum terintegrasi dengan struktur data tingkat lanjut. Meski demikian, fondasi implementasi sudah memadai untuk melanjutkan ke Progress 2, yaitu pengembangan Stack berbasis arena.
+Progress 1 berhasil membangun fondasi Arena Allocator sebagai ADT manajemen memori linear dalam bahasa C. Fungsi inti seperti inisialisasi arena, alokasi berbasis offset, pengambilan data, reset arena, dan pelepasan memori telah terimplementasi dan tervalidasi melalui skenario uji.
+
+Secara umum, target tahap awal telah tercapai: arena dapat digunakan sebagai blok memori terpusat dengan proses alokasi yang ringan dan terkontrol. Dengan fondasi ini, pengembangan dapat dilanjutkan ke Progress 2, yaitu integrasi struktur data Stack berbasis arena sebagai langkah lanjutan dari sistem yang sedang dibangun.
