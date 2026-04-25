@@ -7,13 +7,22 @@ Pada pengembangan struktur data berbasis sistem, pengelolaan memori menjadi fakt
 Arena Allocator dipilih karena menggunakan pendekatan alokasi linear: memori dialokasikan sekali di awal dalam satu blok besar, kemudian permintaan alokasi kecil dilayani dengan pergeseran offset. Model ini sederhana, cepat, dan sesuai untuk kebutuhan alokasi sementara yang dapat dibersihkan sekaligus melalui operasi reset.
 
 ### 1.2 Tujuan Progress 1
-Progress 1 bertujuan untuk:
-1. Mengimplementasikan Arena Allocator dasar dalam bahasa C.
-2. Memvalidasi proses alokasi berhasil dan alokasi gagal saat kapasitas tidak mencukupi.
-3. Menunjukkan mekanisme reset arena sebagai dasar integrasi ke Stack dan Data Stream pada progress berikutnya.
+Berdasarkan deskripsi penugasan yang diberikan, tujuan dari proyek ini adalah:
+1. Mengimplementasikan Arena Allocator sebagai Abstract Data Type (ADT) yang mandiri tanpa bergantung pada alokasi memori dinamis di level struktur data.
+2. Membangun struktur data (seperti array dan linked list) yang seluruh elemennya berada di dalam satu blok memori terpusat.
+3. Melakukan analisis komparatif antara penggunaan Arena Allocator dengan mekanisme malloc/free dari sisi performa dan efisiensi memori.
+4. Memvisualisasikan tata letak memori dalam bentuk grid ASCII untuk memahami perilaku alokasi secara riil.
 
-### 1.3 Dasar Teori Singkat
-Arena Allocator bekerja dengan prinsip bump allocation, yaitu menaikkan pointer/offset setiap kali alokasi dilakukan tanpa mekanisme pembebasan per-blok. Keunggulan pendekatan ini adalah biaya alokasi yang rendah dan implementasi yang mudah dipahami. Konsekuensinya, pelepasan memori umumnya dilakukan secara kolektif melalui reset seluruh arena.
+### 1.3 Lingkup Tahapan Minggu ke-1
+Pada tahap awal ini (Minggu 1), fokus utama tim adalah membangun fondasi sistem berupa Arena Allocator. Implementasi difokuskan pada pembuatan fungsi-fungsi dasar API arena yang meliputi:
+
+1) `arena_init`: Inisialisasi blok memori awal dan kapasitas arena.
+2) `arena_alloc`: Mekanisme pembagian memori di dalam arena secara linear.
+3) `arena_get`: Pengambilan data berdasarkan `offset` yang sudah dialokasikan.
+4) `arena_reset`: Pengosongan arena secara instan untuk memulai alokasi dari awal kembali.
+
+### 1.4 Dasar Teori Singkat
+Arena Allocator bekerja dengan prinsip bump allocation, yaitu menaikkan pointer atau offset setiap kali alokasi dilakukan tanpa mekanisme pembebasan per-blok. Keunggulan pendekatan ini adalah biaya alokasi yang rendah dan implementasi yang mudah dipahami. Konsekuensinya, pelepasan memori umumnya dilakukan secara kolektif melalui reset seluruh arena.
 
 ## 2. Implementasi Program
 ### 2.1 Struktur Berkas
