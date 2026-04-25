@@ -96,6 +96,8 @@ Selain itu, fungsi `arena_reset` berhasil mengembalikan offset ke posisi awal ta
 Namun, hasil pembahasan juga menunjukkan keterbatasan pada tahap ini. Arena belum mendukung deallocation per-blok dan belum memiliki strategi reuse sebagian area memori. Artinya, model ini efektif untuk pola alokasi sementara, tetapi belum cukup untuk kasus yang membutuhkan pelepasan memori granular.
 
 ### 4.2 Kesimpulan
-Progress 1 berhasil membangun fondasi Arena Allocator sebagai ADT manajemen memori linear dalam bahasa C. Fungsi inti seperti inisialisasi arena, alokasi berbasis offset, pengambilan data, reset arena, dan pelepasan memori telah terimplementasi dan tervalidasi melalui skenario uji.
+Berdasarkan praktikum yang telah dilakukan, dapat disimpulkan bahwa pendekatan Arena Allocator berhasil mendemonstrasikan konsep manajemen memori berbasis region secara jelas. Seluruh alokasi dilakukan pada satu blok memori terpusat dengan mekanisme pergeseran offset, sehingga proses alokasi menjadi sederhana, cepat, dan mudah dipantau melalui visualisasi arena.
 
-Secara umum, target tahap awal telah tercapai: arena dapat digunakan sebagai blok memori terpusat dengan proses alokasi yang ringan dan terkontrol. Dengan fondasi ini, pengembangan dapat dilanjutkan ke Progress 2, yaitu integrasi struktur data Stack berbasis arena sebagai langkah lanjutan dari sistem yang sedang dibangun.
+Implementasi pada Progress 1 juga membuktikan bahwa pemisahan antara konsep pemesanan ruang (`arena_alloc`) dan pengambilan alamat aktual (`arena_get`) memberikan stabilitas referensi yang baik selama arena masih valid. Selain itu, operasi `arena_reset` menunjukkan efisiensi dalam mendaur ulang arena karena pengosongan logis dapat dilakukan tanpa pembebasan blok satu per satu ke sistem operasi.
+
+Di sisi lain, keterbatasan utama tahap ini adalah belum adanya deallocation per-blok dan belum tersedianya mekanisme reuse parsial untuk pola alokasi yang kompleks. Meskipun demikian, tujuan Progress 1 telah tercapai dengan baik: fondasi API arena sudah terbentuk, perilaku alokasi sudah tervalidasi, dan sistem siap dikembangkan ke Progress 2 untuk integrasi struktur data Stack berbasis arena.
