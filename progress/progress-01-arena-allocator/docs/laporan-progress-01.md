@@ -36,9 +36,36 @@ Sebelum masuk ke penerapan struktur data lanjutan pada progress berikutnya, kami
 4) `arena_reset`: Pengosongan arena secara instan untuk memulai alokasi dari awal kembali.
 5) `arena_destroy`: Pelepasan memori arena setelah program selesai digunakan.
 
-### 2.2 Struktur Berkas dan Alur Uji Program
-Implementasi dilakukan pada tiga berkas sumber utama, yaitu `src/arena.h`, `src/arena.c`, dan `src/main.c`. Berkas `arena.h` digunakan untuk mendeklarasikan struktur `Arena` serta prototipe fungsi, `arena.c` berisi implementasi seluruh fungsi utama arena, sedangkan `main.c` digunakan untuk menguji perilaku alokasi, penulisan data, pencetakan kondisi arena, dan proses reset.
+### 2.2 File arena.h
+File header ini berisi deklarasi struktur data dan fungsi-fungsi utama yang digunakan oleh sistem arena. Struktur `Arena` didefinisikan dengan tiga komponen inti, yaitu `buffer` bertipe `unsigned char *` sebagai lokasi penyimpanan data mentah, `capacity` bertipe `size_t` sebagai ukuran total arena, dan `offset` bertipe `size_t` sebagai penanda posisi alokasi saat ini.
 
+Pada header juga dideklarasikan fungsi-fungsi utama API arena, yaitu `arena_init`, `arena_alloc`, `arena_get`, `arena_reset`, `arena_destroy`, `arena_available`, dan `arena_dump`. Deklarasi ini bertujuan memisahkan antarmuka (interface) dari implementasi sehingga kode lebih terstruktur dan mudah dikembangkan.
+
+### 2.3 File arena.c
+File ini berisi implementasi seluruh fungsi yang telah dideklarasikan pada header. Setiap fungsi memiliki peran spesifik dalam mekanisme pengelolaan memori arena.
+
+Fungsi `arena_init` bertugas melakukan inisialisasi arena dengan mengalokasikan satu blok memori dari sistem operasi, kemudian mengatur nilai `capacity` dan `offset` awal. Apabila input tidak valid atau alokasi memori gagal, fungsi mengembalikan status gagal agar program utama dapat menangani kondisi tersebut.
+
+Fungsi `arena_alloc` merupakan inti mekanisme bump allocation. Fungsi ini memeriksa apakah `offset + size` masih berada dalam batas `capacity`. Jika tidak mencukupi, fungsi mengembalikan status gagal. Jika mencukupi, nilai offset saat ini disimpan sebagai hasil alokasi, lalu offset digeser maju sebesar ukuran yang diminta.
+
+Fungsi `arena_get` digunakan untuk menerjemahkan nilai offset menjadi alamat memori aktual. Validasi dilakukan agar offset tidak melebihi batas arena. Dengan demikian, proses pemesanan ruang (`arena_alloc`) dipisahkan dari proses pengambilan alamat data (`arena_get`) sehingga akses memori lebih aman dan terkontrol.
+
+Fungsi `arena_reset` mengatur ulang `offset` ke nilai nol sehingga seluruh area arena dianggap kosong kembali secara logis. Proses ini tidak menghapus isi byte satu per satu, tetapi menandai bahwa alokasi baru akan dimulai dari awal.
+
+Fungsi `arena_destroy` bertugas membebaskan blok memori arena pada akhir siklus program. Setelah pembebasan, pointer diatur ke `NULL` dan metadata arena dikembalikan ke nilai aman untuk mencegah dangling pointer.
+
+Fungsi `arena_available` menghitung sisa kapasitas yang belum terpakai dengan rumus `capacity - offset`. Informasi ini berguna untuk pemantauan kondisi memori saat debugging maupun pengujian.
+
+Fungsi `arena_dump` menampilkan kondisi arena secara visual dalam bentuk grid ASCII. Byte yang telah terpakai ditandai dengan `[#]` dan byte kosong ditandai dengan `[.]`. Parameter lebar tampilan digunakan agar visualisasi lebih mudah dibaca.
+
+### 2.4 File main.c
+File `main.c` berfungsi sebagai program pengujian implementasi arena allocator. Program dimulai dengan deklarasi variabel arena, dilanjutkan inisialisasi kapasitas 32 byte, dan penampilan kondisi awal arena melalui `arena_dump`.
+
+Setelah itu program melakukan alokasi bertahap untuk menguji skenario normal dan skenario gagal. Alokasi blok A dan blok B digunakan untuk memverifikasi bahwa offset bergerak sesuai ukuran alokasi. Data kemudian ditulis ke area memori hasil alokasi melalui pointer yang diperoleh dari `arena_get`.
+
+Program juga menguji kasus batas dengan mencoba mengalokasikan blok C yang melebihi sisa kapasitas. Kondisi ini harus menghasilkan status gagal, sehingga dapat dibuktikan bahwa validasi batas memori berjalan benar. Pada tahap akhir, `arena_reset` dipanggil untuk memastikan arena kembali ke kondisi awal secara logis.
+
+### 2.5 Alur Uji Program
 Skenario uji pada program utama disusun sebagai berikut:
 1. Inisialisasi arena dengan kapasitas 32 byte.
 2. Alokasi blok A sebesar 6 byte dan isi dengan karakter `A`.
