@@ -1,0 +1,39 @@
+Kondisi awal arena:
+
+=== ARENA DUMP ===
+
+[.][.][.][.][.][.][.][.]
+[.][.][.][.][.][.][.][.]
+[.][.][.][.][.][.][.][.]
+[.][.][.][.][.][.][.][.]
+
+Offset: 0 / 32
+Tersisa: 32 byte
+
+Alokasi blok A (6 byte) berhasil di offset 0.
+Alokasi blok B (10 byte) berhasil di offset 6.
+Alokasi blok C (20 byte) gagal karena kapasitas tidak cukup.
+
+Kondisi arena setelah alokasi:
+
+=== ARENA DUMP ===
+
+[#][#][#][#][#][#][#][#]
+[#][#][#][#][#][#][#][#]
+[.][.][.][.][.][.][.][.]
+[.][.][.][.][.][.][.][.]
+
+Offset: 16 / 32
+Tersisa: 16 byte
+
+Setelah arena_reset():
+
+=== ARENA DUMP ===
+
+[.][.][.][.][.][.][.][.]
+[.][.][.][.][.][.][.][.]
+[.][.][.][.][.][.][.][.]
+[.][.][.][.][.][.][.][.]
+
+Offset: 0 / 32
+Tersisa: 32 byte
