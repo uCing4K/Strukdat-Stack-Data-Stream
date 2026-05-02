@@ -1,20 +1,21 @@
 #include "arena.h"
 
 #include <stdio.h>
-#include <stdlib.h>
+
+#define ARENA_MAX_CAPACITY 4096
+
+static unsigned char arena_storage[ARENA_MAX_CAPACITY];
 
 int arena_init(Arena *arena, size_t size) {
     if (arena == NULL || size == 0) {
         return 0;
     }
 
-    arena->buffer = (unsigned char *)malloc(size);
-    if (arena->buffer == NULL) {
-        arena->capacity = 0;
-        arena->offset = 0;
+    if (size > ARENA_MAX_CAPACITY) {
         return 0;
     }
 
+    arena->buffer = arena_storage;
     arena->capacity = size;
     arena->offset = 0;
     return 1;
@@ -55,7 +56,6 @@ void arena_destroy(Arena *arena) {
         return;
     }
 
-    free(arena->buffer);
     arena->buffer = NULL;
     arena->capacity = 0;
     arena->offset = 0;

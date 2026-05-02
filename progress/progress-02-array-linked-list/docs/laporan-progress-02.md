@@ -3,7 +3,7 @@
 ## 1. Pendahuluan
 
 ### 1.1 Tujuan Progress
-Progress 2 bertujuan untuk mengimplementasikan struktur data dasar (Array dan Linked List) yang sepenuhnya memanfaatkan Arena Allocator sebagai mekanisme manajemen memori. Struktur data ini dirancang untuk beroperasi dalam satu blok memori terpusat tanpa menggunakan alokasi konvensional seperti malloc/free.
+Progress 2 bertujuan untuk mengimplementasikan struktur data dasar (Array dan Linked List) yang memanfaatkan Arena Allocator sebagai mekanisme manajemen memori pada level struktur data. Struktur data ini dirancang untuk beroperasi di dalam satu blok memori terpusat tanpa menggunakan alokasi konvensional seperti malloc/free pada implementasi Array dan Linked List.
 
 ### 1.2 Dasar Teori
 **Arena Allocator:**
@@ -213,7 +213,7 @@ Arena cocok untuk **batch processing, game loops, dan skenario reset berkala**.
 
 ### 4.6 Kesimpulan
 Progress 2 berhasil mendemonstrasikan:
-- **Array dan Linked List berbasis offset-based pointer** beroperasi sepenuhnya dalam Arena Allocator.
+- **Array dan Linked List berbasis offset-based pointer** beroperasi di dalam Arena Allocator pada level struktur data.
 - **Memory layout linear dan predictable**, memvisualisasikan benefit cache locality dan no fragmentation.
 - **Offset abstraction effective** untuk merepresentasikan hubungan antar node tanpa pointer C biasa.
 - **Fondasi siap** untuk Progress 3 (Stack + Data Stream integration) dengan confidence struktur data berbasis arena sudah validated.
