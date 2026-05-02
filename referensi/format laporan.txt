@@ -1,0 +1,8 @@
+1. Pendahuluan
+Berisi tujuan praktikum dan dasar teori yang relevan dengan materi.
+2. Implementasi Program
+Berisi penjelasan singkat mengenai studi kasus/soal yang dikerjakan, kemudian dilanjutkan dengan source code program yang dibuat.
+3. Output Program
+Menampilkan hasil eksekusi program sesuai dengan implementasi yang telah dibuat.
+4. Pembahasan dan Kesimpulan
+Berisi penjelasan terhadap hasil program, analisis singkat dari source code, serta kesimpulan dari praktikum yang dilakukan.
