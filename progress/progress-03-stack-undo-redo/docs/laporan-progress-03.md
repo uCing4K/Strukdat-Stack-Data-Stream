@@ -123,13 +123,13 @@ Skenario uji didesain untuk memvalidasi seluruh aspek sistem undo/redo:
 
 ### 3.1 Inisialisasi Arena dan Session
 ```
-=== Progress 3: Stack + Data Stream (Undo/Redo Simulator) ===
+=== Progress 3: Stack + Data Stream (Simulator Undo/Redo) ===
 
-1. Arena initialized (512 bytes)
+1. Arena diinisialisasi (512 bytes)
 
-=== Arena Memory Dump ===
-Capacity: 512 bytes, Used: 0 bytes, Available: 512 bytes
-Offset breakdown (line width: 64):
+=== Dump Memori Arena ===
+Kapasitas: 512 byte, Terpakai: 0 byte, Tersedia: 512 byte
+Breakdown Offset (lebar baris: 64):
 [0000] ................................................................
 [0064] ................................................................
 [0128] ................................................................
@@ -140,11 +140,11 @@ Offset breakdown (line width: 64):
 [0448] ................................................................
 =========================
 
-2. Session initialized (integer stack, max 20 elements)
-=== Session Info ===
-Undo stack size: 1
-Redo stack size: 0
-Current state [0 elements]: [ ]
+2. Sesi diinisialisasi (tumpukan integer, kapasitas max 20 elemen)
+=== Informasi Sesi ===
+Ukuran stack undo: 1
+Ukuran stack redo: 0
+State saat ini [0 elemen]: [ ]
 ====================
 ```
 
@@ -152,25 +152,25 @@ Current state [0 elements]: [ ]
 
 ### 3.2 Forward Phase: Append 10, 20, 30, 40
 ```
-3. Simulating data stream operations:
+3. Simulasi aliran data operasi:
 
-  [Op1] APPEND 10
-Current state [1 elements]: [ 10 ]
+  [Op1] TAMBAH 10
+State saat ini [1 elemen]: [ 10 ]
 
-  [Op2] APPEND 20
-Current state [2 elements]: [ 10, 20 ]
+  [Op2] TAMBAH 20
+State saat ini [2 elemen]: [ 10, 20 ]
 
-  [Op3] APPEND 30
-Current state [3 elements]: [ 10, 20, 30 ]
+  [Op3] TAMBAH 30
+State saat ini [3 elemen]: [ 10, 20, 30 ]
 
-  [Op4] APPEND 40
-Current state [4 elements]: [ 10, 20, 30, 40 ]
+  [Op4] TAMBAH 40
+State saat ini [4 elemen]: [ 10, 20, 30, 40 ]
 
-  Session info after 4 appends:
-=== Session Info ===
-Undo stack size: 5
-Redo stack size: 0
-Current state [4 elements]: [ 10, 20, 30, 40 ]
+  Informasi sesi setelah 4 operasi tambah:
+=== Informasi Sesi ===
+Ukuran stack undo: 5
+Ukuran stack redo: 0
+State saat ini [4 elemen]: [ 10, 20, 30, 40 ]
 ====================
 ```
 
@@ -178,19 +178,19 @@ Current state [4 elements]: [ 10, 20, 30, 40 ]
 
 ### 3.3 Backward Phase: Undo 2 Kali
 ```
-4. Testing UNDO operations:
+4. Pengujian operasi UNDO:
 
   [Undo1]
-Current state [3 elements]: [ 10, 20, 30 ]
+State saat ini [3 elemen]: [ 10, 20, 30 ]
 
   [Undo2]
-Current state [2 elements]: [ 10, 20 ]
+State saat ini [2 elemen]: [ 10, 20 ]
 
-  Session info after 2 undos:
-=== Session Info ===
-Undo stack size: 3
-Redo stack size: 2
-Current state [2 elements]: [ 10, 20 ]
+  Informasi sesi setelah 2 undo:
+=== Informasi Sesi ===
+Ukuran stack undo: 3
+Ukuran stack redo: 2
+State saat ini [2 elemen]: [ 10, 20 ]
 ====================
 ```
 
@@ -198,16 +198,16 @@ Current state [2 elements]: [ 10, 20 ]
 
 ### 3.4 Forward with Redo: Redo 1 Kali
 ```
-5. Testing REDO operations:
+5. Pengujian operasi REDO:
 
   [Redo1]
-Current state [3 elements]: [ 10, 20, 30 ]
+State saat ini [3 elemen]: [ 10, 20, 30 ]
 
-  Session info after 1 redo:
-=== Session Info ===
-Undo stack size: 4
-Redo stack size: 1
-Current state [3 elements]: [ 10, 20, 30 ]
+  Informasi sesi setelah 1 redo:
+=== Informasi Sesi ===
+Ukuran stack undo: 4
+Ukuran stack redo: 1
+State saat ini [3 elemen]: [ 10, 20, 30 ]
 ====================
 ```
 
@@ -215,16 +215,16 @@ Current state [3 elements]: [ 10, 20, 30 ]
 
 ### 3.5 Branch Creation: New Append 99
 ```
-6. New operation after redo (APPEND 99):
+6. Operasi baru setelah redo (TAMBAH 99):
 
-  [Op5] APPEND 99 (redo stack should clear)
-Current state [4 elements]: [ 10, 20, 30, 99 ]
+  [Op5] TAMBAH 99 (stack redo akan dihapus)
+State saat ini [4 elemen]: [ 10, 20, 30, 99 ]
 
-  Session info after new append:
-=== Session Info ===
-Undo stack size: 5
-Redo stack size: 0
-Current state [4 elements]: [ 10, 20, 30, 99 ]
+  Informasi sesi setelah append baru:
+=== Informasi Sesi ===
+Ukuran stack undo: 5
+Ukuran stack redo: 0
+State saat ini [4 elemen]: [ 10, 20, 30, 99 ]
 ====================
 ```
 
@@ -232,16 +232,16 @@ Current state [4 elements]: [ 10, 20, 30, 99 ]
 
 ### 3.6 Remove Operation: Hapus Index 1
 ```
-7. Testing REMOVE operation:
+7. Pengujian operasi HAPUS:
 
-  [Op6] REMOVE index 1
-Current state [3 elements]: [ 10, 30, 99 ]
+  [Op6] HAPUS indeks 1
+State saat ini [3 elemen]: [ 10, 30, 99 ]
 
-  Session info after remove:
-=== Session Info ===
-Undo stack size: 6
-Redo stack size: 0
-Current state [3 elements]: [ 10, 30, 99 ]
+  Informasi sesi setelah penghapusan:
+=== Informasi Sesi ===
+Ukuran stack undo: 6
+Ukuran stack redo: 0
+State saat ini [3 elemen]: [ 10, 30, 99 ]
 ====================
 ```
 
@@ -249,16 +249,16 @@ Current state [3 elements]: [ 10, 30, 99 ]
 
 ### 3.7 Undo Remove
 ```
-8. Undo the remove:
+8. Undo operasi penghapusan:
 
   [Undo3]
-Current state [4 elements]: [ 10, 20, 30, 99 ]
+State saat ini [4 elemen]: [ 10, 20, 30, 99 ]
 
-  Session info:
-=== Session Info ===
-Undo stack size: 5
-Redo stack size: 1
-Current state [4 elements]: [ 10, 20, 30, 99 ]
+  Informasi sesi:
+=== Informasi Sesi ===
+Ukuran stack undo: 5
+Ukuran stack redo: 1
+State saat ini [4 elemen]: [ 10, 20, 30, 99 ]
 ====================
 ```
 
@@ -266,11 +266,11 @@ Current state [4 elements]: [ 10, 20, 30, 99 ]
 
 ### 3.8 Final Arena State
 ```
-9. Final arena state:
+9. Kondisi akhir arena:
 
-=== Arena Memory Dump ===
-Capacity: 512 bytes, Used: 356 bytes, Available: 156 bytes
-Offset breakdown (line width: 64):
+=== Dump Memori Arena ===
+Kapasitas: 512 byte, Terpakai: 356 byte, Tersedia: 156 byte
+Breakdown Offset (lebar baris: 64):
 [0000] ################################################################
 [0064] ################################################################
 [0128] ################################################################
@@ -281,7 +281,7 @@ Offset breakdown (line width: 64):
 [0448] ................................................................
 =========================
 
-=== Progress 3 Demo Complete ===
+=== Demonstrasi Progress 3 Selesai ===
 ```
 
 **Interpretasi:** Setelah seluruh operasi, arena menggunakan 356 byte dari 512 byte (69.5% utilization). Memori yang terpakai meliputi:
