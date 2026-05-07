@@ -5,52 +5,52 @@
 #include <stdio.h>
 
 int main() {
-    printf("=== Progress 3: Stack + Data Stream (Undo/Redo Simulator) ===\n\n");
+    printf("=== Progress 3: Stack + Data Stream (Simulator Undo/Redo) ===\n\n");
     
     // Initialize arena
     Arena arena;
     if (!arena_init(&arena, 512)) {
-        printf("Failed to initialize arena\n");
+        printf("Gagal menginisialisasi arena\n");
         return 1;
     }
     
-    printf("1. Arena initialized (512 bytes)\n");
+    printf("1. Arena diinisialisasi (512 bytes)\n");
     arena_dump(&arena, 64);
     
     // Initialize session manager
     SessionManager manager;
     if (!session_init(&arena, &manager, sizeof(int), 20)) {
-        printf("Failed to initialize session\n");
+        printf("Gagal menginisialisasi sesi\n");
         return 1;
     }
     
-    printf("2. Session initialized (integer stack, max 20 elements)\n");
+    printf("2. Sesi diinisialisasi (tumpukan integer, kapasitas max 20 elemen)\n");
     session_print_info(&manager);
     
     // Simulate data stream operations
-    printf("\n3. Simulating data stream operations:\n");
+    printf("\n3. Simulasi aliran data operasi:\n");
     
-    printf("\n  [Op1] APPEND 10\n");
+    printf("\n  [Op1] TAMBAH 10\n");
     session_append(&arena, &manager, 10);
     session_print_state(&manager);
     
-    printf("\n  [Op2] APPEND 20\n");
+    printf("\n  [Op2] TAMBAH 20\n");
     session_append(&arena, &manager, 20);
     session_print_state(&manager);
     
-    printf("\n  [Op3] APPEND 30\n");
+    printf("\n  [Op3] TAMBAH 30\n");
     session_append(&arena, &manager, 30);
     session_print_state(&manager);
     
-    printf("\n  [Op4] APPEND 40\n");
+    printf("\n  [Op4] TAMBAH 40\n");
     session_append(&arena, &manager, 40);
     session_print_state(&manager);
     
-    printf("\n  Session info after 4 appends:\n");
+    printf("\n  Informasi sesi setelah 4 operasi tambah:\n");
     session_print_info(&manager);
     
     // Test undo operations
-    printf("\n4. Testing UNDO operations:\n");
+    printf("\n4. Pengujian operasi UNDO:\n");
     
     printf("\n  [Undo1]\n");
     session_undo(&arena, &manager);
@@ -60,51 +60,51 @@ int main() {
     session_undo(&arena, &manager);
     session_print_state(&manager);
     
-    printf("\n  Session info after 2 undos:\n");
+    printf("\n  Informasi sesi setelah 2 undo:\n");
     session_print_info(&manager);
     
     // Test redo operations
-    printf("\n5. Testing REDO operations:\n");
+    printf("\n5. Pengujian operasi REDO:\n");
     
     printf("\n  [Redo1]\n");
     session_redo(&arena, &manager);
     session_print_state(&manager);
     
-    printf("\n  Session info after 1 redo:\n");
+    printf("\n  Informasi sesi setelah 1 redo:\n");
     session_print_info(&manager);
     
     // New operation (should clear redo)
-    printf("\n6. New operation after redo (APPEND 99):\n");
-    printf("\n  [Op5] APPEND 99 (redo stack should clear)\n");
+    printf("\n6. Operasi baru setelah redo (TAMBAH 99):\n");
+    printf("\n  [Op5] TAMBAH 99 (stack redo akan dihapus)\n");
     session_append(&arena, &manager, 99);
     session_print_state(&manager);
     
-    printf("\n  Session info after new append:\n");
+    printf("\n  Informasi sesi setelah append baru:\n");
     session_print_info(&manager);
     
     // Test remove operation
-    printf("\n7. Testing REMOVE operation:\n");
-    printf("\n  [Op6] REMOVE index 1\n");
+    printf("\n7. Pengujian operasi HAPUS:\n");
+    printf("\n  [Op6] HAPUS indeks 1\n");
     session_remove(&arena, &manager, 1);
     session_print_state(&manager);
     
-    printf("\n  Session info after remove:\n");
+    printf("\n  Informasi sesi setelah penghapusan:\n");
     session_print_info(&manager);
     
     // Undo the remove
-    printf("\n8. Undo the remove:\n");
+    printf("\n8. Undo operasi penghapusan:\n");
     printf("\n  [Undo3]\n");
     session_undo(&arena, &manager);
     session_print_state(&manager);
     
-    printf("\n  Session info:\n");
+    printf("\n  Informasi sesi:\n");
     session_print_info(&manager);
     
     // Final arena dump
-    printf("\n9. Final arena state:\n");
+    printf("\n9. Kondisi akhir arena:\n");
     arena_dump(&arena, 64);
     
-    printf("\n=== Progress 3 Demo Complete ===\n");
+    printf("\n=== Demonstrasi Progress 3 Selesai ===\n");
     
     // Cleanup
     arena_destroy(&arena);

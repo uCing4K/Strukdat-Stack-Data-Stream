@@ -194,7 +194,7 @@ void session_print_state(SessionManager *manager) {
         return;
     }
     
-    printf("Current state [%zu elements]: ", manager->current_size);
+    printf("State saat ini [%zu elemen]: ", manager->current_size);
     if (manager->current_size == 0) {
         printf("[ ]");
     } else {
@@ -213,9 +213,9 @@ void session_print_info(SessionManager *manager) {
         return;
     }
     
-    printf("=== Session Info ===\n");
-    printf("Undo stack size: %zu\n", stack_size(&manager->undo_stack));
-    printf("Redo stack size: %zu\n", stack_size(&manager->redo_stack));
+    printf("=== Informasi Sesi ===\n");
+    printf("Ukuran stack undo: %zu\n", stack_size(&manager->undo_stack));
+    printf("Ukuran stack redo: %zu\n", stack_size(&manager->redo_stack));
     session_print_state(manager);
     printf("====================\n");
 }

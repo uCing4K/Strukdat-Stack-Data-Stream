@@ -25,26 +25,28 @@ Fokus implementasi inti adalah membangun **Arena Allocator** berbasis C sebagai 
 ## Struktur Repository Saat Ini
 - `progress/progress-01-arena-allocator/src/`: source code Progress 1
 - `progress/progress-01-arena-allocator/docs/`: draft laporan dan output eksekusi Progress 1
-- `progress/progress-02-array-linked-list/src/`: source code Progress 2 (aktif)
+- `progress/progress-02-array-linked-list/src/`: source code Progress 2
 - `progress/progress-02-array-linked-list/docs/`: draft laporan dan output eksekusi Progress 2
+- `progress/progress-03-stack-undo-redo/src/`: source code Progress 3 (aktif)
+- `progress/progress-03-stack-undo-redo/docs/`: draft laporan dan output eksekusi Progress 3
 - `LAPORAN PROGRES1_KELOMPOK2/`: referensi implementasi awal
 - `format laporan.txt`: format wajib laporan setiap progress
 - `README.md`: dokumen utama proyek yang akan di-*patch* setiap progress
 
-## Build dan Run (Progress 2 - Aktif)
-Masuk ke folder Progress 2, lalu kompilasi dengan GCC:
+## Build dan Run (Progress 3 - Aktif)
+Masuk ke folder Progress 3, lalu kompilasi dengan GCC:
 
 ```bash
-cd "progress/progress-02-array-linked-list/src"
-gcc main.c arena.c array.c linked_list.c -o main
+cd "progress/progress-03-stack-undo-redo/src"
+gcc main.c arena.c stack.c snapshot.c session_manager.c -o main
 ./main
 ```
 
 Jika menggunakan PowerShell di Windows:
 
 ```powershell
-Set-Location "progress/progress-02-array-linked-list/src"
-gcc main.c arena.c array.c linked_list.c -o main
+Set-Location "progress/progress-03-stack-undo-redo/src"
+gcc main.c arena.c stack.c snapshot.c session_manager.c -o main
 .\main.exe
 ```
 
@@ -93,6 +95,57 @@ Artefak Progress 2:
 - Draft laporan: `progress/progress-02-array-linked-list/docs/laporan-progress-02.md`
 - Output eksekusi: `progress/progress-02-array-linked-list/docs/output-progress-02.txt`
 
+## Ringkasan Implementasi Progress 3
+Komponen utama Stack dan Simulasi Undo/Redo berbasis Arena:
+
+**Stack ADT** (`stack.h` / `stack.c`):
+- Menggunakan **offset-based pointer** (sama seperti Linked List Progress 2).
+- Setiap node memiliki struktur: `[size_t next_offset][data]`.
+- `stack_create`: inisialisasi stack kosong.
+- `stack_push`: menambah elemen ke atas stack (O(1)).
+- `stack_pop`: menghapus dan mengembalikan elemen teratas (O(1)).
+- `stack_peek`: melihat elemen teratas tanpa menghapus (O(1)).
+- `stack_is_empty`: periksa apakah stack kosong.
+- `stack_size`: kembalikan jumlah elemen.
+- `stack_traverse`: traversal dan menampilkan semua elemen.
+
+**Snapshot Structure** (`snapshot.h` / `snapshot.c`):
+- Mekanisme penyimpanan state lengkap dari data array.
+- `snapshot_create`: alokasi ruang di arena dan copy data.
+- `snapshot_restore`: ekstrak data snapshot ke buffer caller.
+- `snapshot_get_data`: dapatkan pointer langsung ke data snapshot.
+ (Undo/Redo Simulator)
+- Status: Selesai (Stack ADT, Snapshot mechanism, Session Manager dengan undo/redo logic diimplementasikan dan tervalidasi).
+- Fokus:
+  - Implementasi Stack ADT dengan offset-based pointer berbasis arena.
+  - Mekanisme snapshot untuk menyimpan state history.
+  - Two-stack approach untuk undo/redo navigation.
+  - Simulasi data stream dengan operasi append, remove, undo, redo.
+  - Visualisasi state history dan memory layout.
+  - Demonstrasi branch creation saat operasi baru setelah undotore state lama dari undo.
+- `session_redo`: move state ke undo, restore state baru dari redo.
+- `session_clear_redo`: reset redo stack (dipanggil setelah operasi baru).
+
+**Karakteristik Implementasi:**
+- Two-stack approach: setiap operasi snapshot state sebelum dan sesudah.
+- Clear redo stack setelah operasi baru untuk menunjukkan branch history baru.
+- Simulasi data stream dengan operasi append/remove dan history navigation.
+- Arena dump menunjukkan penggunaan memori untuk semua struktur (stacks + snapshots).
+
+**Hasil Demonstrasi:**
+- Operasi forward: 4 append (10 → 20 → 30 → 40), undo stack berkembang ke 5 snapshot.
+- Operasi backward: 2 undo, kembali ke [10, 20], redo stack terbentuk dengan 2 snapshot.
+- Operasi redo: 1 redo, maju ke [10, 20, 30], state seimbang antara undo/redo.
+- Branch creation: append baru (99), redo stack dihapus, branch history dimulai.
+- Operasi remove: hapus index 1 (20), state menjadi [10, 30, 99].
+- Undo remove: kembali ke [10, 20, 30, 99], redo stack berisi [10, 30, 99].
+- Final arena: 356/512 bytes terpakai (69.5% utilization).
+
+Artefak Progress 3:
+- Source: `progress/progress-03-stack-undo-redo/src/`
+- Draft laporan: `progress/progress-03-stack-undo-redo/docs/laporan-progress-03.md`
+- Output eksekusi: `progress/progress-03-stack-undo-redo/docs/output-progress-03.txt`
+
 ## Roadmap Progress (1-4)
 ### Progress 1 - Dasar Arena Allocator
 - Status: Selesai (implementasi ulang dari awal tersedia dan tervalidasi).
@@ -123,9 +176,11 @@ Artefak Progress 2:
 ### Progress 4 - Finalisasi Sistem dan Evaluasi
 - Status: Belum dimulai.
 - Target:
-  - Finalisasi stack + data stream berbasis arena.
-  - Uji skenario gabungan dan pembandingan hasil.
-  - Penyusunan kesimpulan akhir dan evaluasi desain.
+  - Eksplorasi struktur data advanced (Tree, Hash Table) dengan integrasi Arena.
+  - Integrasi multiple structures dalam satu session (e.g., tree + hash table collaboration).
+  - Simulasi batch processing atau real-time analytics berbasis aliran data.
+  - Uji skenario gabungan dan pembandingan hasil dengan Progress 3.
+  - Penyusunan kesimpulan akhir dan evaluasi desain sistem.
   - Presentasi dan dokumentasi lengkap.
 
 ## Template Isi Laporan Setiap Progress

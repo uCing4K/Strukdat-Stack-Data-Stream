@@ -63,10 +63,10 @@ void arena_dump(Arena *arena, size_t line_width) {
     if (arena == NULL || line_width == 0) {
         return;
     }
-    printf("\n=== Arena Memory Dump ===\n");
-    printf("Capacity: %zu bytes, Used: %zu bytes, Available: %zu bytes\n",
+    printf("\n=== Dump Memori Arena ===\n");
+    printf("Kapasitas: %zu byte, Terpakai: %zu byte, Tersedia: %zu byte\n",
            arena->capacity, arena->offset, arena_available(arena));
-    printf("Offset breakdown (line width: %zu):\n", line_width);
+    printf("Breakdown Offset (lebar baris: %zu):\n", line_width);
     
     for (size_t i = 0; i < arena->capacity; i += line_width) {
         printf("[%04zu] ", i);
